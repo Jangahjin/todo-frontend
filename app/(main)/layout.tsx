@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 
 import { useAuthToken } from "@/hooks/useAuth";
 
+import { Header } from "@/components/common/Header";
+
 /**
  * (main) 라우트 그룹 인증 가드. 토큰이 없으면 로그인 페이지로 보낸다.
  * 만료·위조 토큰(있지만 무효)은 실제 API 호출이 401을 받았을 때 lib/api/client.ts의
@@ -24,5 +26,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 		return null;
 	}
 
-	return <>{children}</>;
+	return (
+		<div className="flex min-h-full flex-1 flex-col">
+			<Header />
+			<main className="flex flex-1 flex-col">{children}</main>
+		</div>
+	);
 }
