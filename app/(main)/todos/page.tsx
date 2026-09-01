@@ -38,6 +38,8 @@ function TodosPageContent() {
 	const rawStatus = searchParams.get("status");
 	const status = isTodoStatus(rawStatus) ? rawStatus : null;
 	const keyword = searchParams.get("keyword") ?? "";
+	// 상세 화면이 존재하지 않거나 타인 소유(TODO_001)인 Todo에서 리다이렉트할 때 붙이는 안내 (Task 030).
+	const notice = searchParams.get("notice") === "not_found" ? "요청하신 Todo를 찾을 수 없습니다." : null;
 
 	const { data, isPending, isError, error } = useTodos({
 		page,
@@ -67,6 +69,12 @@ function TodosPageContent() {
 					</Link>
 				</Button>
 			</div>
+
+			{notice && (
+				<p className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive" role="alert">
+					{notice}
+				</p>
+			)}
 
 			<TodoFilter
 				status={status}
