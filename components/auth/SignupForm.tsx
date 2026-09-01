@@ -11,10 +11,12 @@ import { signup } from "@/lib/api/auth";
 import { applyServerError } from "@/lib/forms/applyServerError";
 import { signupSchema, type SignupFormValues } from "@/lib/schemas/auth";
 
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export function SignupForm() {
 	const router = useRouter();
@@ -96,6 +98,14 @@ export function SignupForm() {
 						{mutation.isPending ? <Loader2 className="animate-spin" /> : "회원가입"}
 					</Button>
 				</form>
+
+				<div className="my-4 flex items-center gap-3">
+					<Separator className="flex-1" />
+					<span className="text-xs text-muted-foreground">또는</span>
+					<Separator className="flex-1" />
+				</div>
+
+				<SocialLoginButtons />
 
 				<p className="mt-4 text-center text-sm text-muted-foreground">
 					이미 계정이 있으신가요?{" "}
