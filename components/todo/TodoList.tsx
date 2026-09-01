@@ -1,4 +1,7 @@
+"use client";
+
 import { ClipboardList } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 
 import type { TodoResponse } from "@/types/todo";
 
@@ -21,11 +24,20 @@ export function TodoList({ todos }: TodoListProps) {
 
 	return (
 		<ul className="flex flex-col gap-2">
-			{todos.map((todo) => (
-				<li key={todo.id}>
-					<TodoItem todo={todo} />
-				</li>
-			))}
+			<AnimatePresence>
+				{todos.map((todo) => (
+					<motion.li
+						key={todo.id}
+						layout
+						initial={{ opacity: 0, y: 4 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.15 }}
+					>
+						<TodoItem todo={todo} />
+					</motion.li>
+				))}
+			</AnimatePresence>
 		</ul>
 	);
 }

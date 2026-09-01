@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Checkbox as CheckboxPrimitive } from "radix-ui"
+import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { CheckIcon } from "lucide-react"
@@ -21,10 +22,17 @@ function Checkbox({
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
+        className="grid place-content-center text-current transition-none"
       >
-        <CheckIcon
-        />
+        {/* 체크될 때마다 새로 마운트되므로(Radix가 미체크 시 언마운트) 매번 스프링으로 팝인한다 */}
+        <motion.span
+          className="grid place-content-center [&>svg]:size-3.5"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
+        >
+          <CheckIcon />
+        </motion.span>
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )
