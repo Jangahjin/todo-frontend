@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LogOut } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -37,7 +37,7 @@ export function Header() {
 		router.push("/login");
 	}
 
-	const initial = (user?.name?.trim()?.[0] ?? user?.email[0] ?? "?").toUpperCase();
+	const initial = user?.name?.trim()?.[0] ?? user?.email[0];
 
 	return (
 		<header className="flex items-center justify-between border-b px-4 py-3">
@@ -61,7 +61,7 @@ export function Header() {
 					<DropdownMenuTrigger asChild>
 						<button type="button" aria-label="사용자 메뉴">
 							<Avatar size="sm">
-								<AvatarFallback>{initial}</AvatarFallback>
+								<AvatarFallback>{initial ? initial.toUpperCase() : <UserIcon className="size-3.5" />}</AvatarFallback>
 							</Avatar>
 						</button>
 					</DropdownMenuTrigger>
