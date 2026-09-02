@@ -13,9 +13,11 @@ test("A 계정의 Todo에 B 계정이 ID로 직접 접근하면 목록으로 리
 	const pageA = await contextA.newPage();
 	await signupAndLogin(pageA, randomEmail("isolation-a"));
 
-	await pageA.getByRole("link", { name: "새 Todo" }).click();
+	// "새 Todo" 링크는 상단 내비게이션과 본문 액션 버튼 두 곳에 있어 main으로 좁힌다.
+	await pageA.getByRole("main").getByRole("link", { name: "새 Todo" }).click();
 	await pageA.waitForURL("/todos/new");
-	await pageA.getByLabel("제목", { exact: true }).fill("A 계정 전용 할 일");
+	// "제목"이라는 접근성 이름이 Tiptap 툴바의 H2 버튼과도 겹쳐 textbox 역할로 좁힌다.
+	await pageA.getByRole("textbox", { name: "제목", exact: true }).fill("A 계정 전용 할 일");
 	await pageA.getByRole("button", { name: "저장" }).click();
 	await pageA.waitForURL("/todos");
 
