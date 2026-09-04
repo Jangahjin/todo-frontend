@@ -4,8 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { use, useEffect } from "react";
 
+import { getViewUrls } from "@/lib/api/attachments";
 import { ApiError } from "@/lib/api/client";
 import { getTodo, updateTodo } from "@/lib/api/todo";
+import { collectAttachmentIds, injectViewUrls } from "@/lib/tiptap/attachment-content";
 
 import { TodoForm, type TodoFormSubmitValues } from "@/components/todo/TodoForm";
 
@@ -26,7 +28,18 @@ export default function TodoDetailPage({ params }: TodoDetailPageProps) {
 
 	const { data, isPending, isError, error } = useQuery({
 		queryKey: ["todos", id],
-		queryFn: () => getTodo(id),
+		// 저장된 content의 이미지 src는 만료된 조회 URL일 수 있다 — attachmentId만 신뢰하고,
+		// 에디터에 주입하기 전에 항상 새 조회 URL을 받아 덮어쓴다 (attachment 가이드 §7).
+		queryFn: async () => {
+			const todo = await getTodo(id);
+			const attachmentIds = collectAttachmentIds(todo.content);
+			if (attachmentIds.length === 0 || !todo.content) {
+				return todo;
+			}
+			const urls = await getViewUrls(attachmentIds);
+			const urlsByAttachmentId = new Map(urls.map((url) => [url.attachmentId, url.viewUrl]));
+			return { ...todo, content: injectViewUrls(todo.content, urlsByAttachmentId) };
+		},
 	});
 
 	const notFound = isError && error instanceof ApiError && error.status === 404;

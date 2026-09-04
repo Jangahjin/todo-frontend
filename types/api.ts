@@ -37,4 +37,9 @@ export type ErrorCode =
 	| "AUTH_006"
 	| "AUTH_007"
 	| "TODO_001"
-	| "TODO_002";
+	| "TODO_002"
+	| "FILE_001"
+	| "FILE_002"
+	| "FILE_003"
+	| "FILE_004"
+	| "FILE_005";
